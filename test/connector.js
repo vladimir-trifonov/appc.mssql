@@ -5,9 +5,7 @@ var should = require('should'),
 	APIBuilder = require('apibuilder'),
 	Connector = require('../').create(APIBuilder),
 	log = APIBuilder.createLogger({}, { name: 'api-connector-mssql TEST', useConsole: true, level: 'info' }),
-	Loader = APIBuilder.Loader,
-	config = new Loader('../conf'),
-	connector = new Connector(config),
+	connector = new Connector(),
 	Model;
 
 

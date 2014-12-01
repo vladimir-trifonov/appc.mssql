@@ -1,7 +1,7 @@
 {
   "name": "appc.mssql",
   "description": "MSSQL connector",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Dawson Toth",
   "license": "",
   "framework": "none",
@@ -21,7 +21,7 @@
   },
   "private": true,
   "dependencies": {
-    "appc-cli-core": "*",
+    "appcelerator": "*",
     "async": "^0.9.0",
     "mssql": "^1.3.0",
     "pkginfo": "^0.3.0",

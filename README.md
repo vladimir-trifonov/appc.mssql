@@ -36,7 +36,7 @@ Now reference the connector in your model.
 ```javascript
 var Account = APIBuilder.Model.extend('Account',{
 	fields: {
-		Name: {type:'string', required: true, validator: /[a-zA-Z]{3,}/ }
+		Name: { type: String, required: true, validator: /[a-zA-Z]{3,}/ }
 	},
 	connector: 'appc.mssql'
 });
@@ -47,7 +47,7 @@ If you want to map a specific model to a specific sobject name, use metadata.  F
 ```javascript
 var Account = APIBuilder.Model.extend('account',{
 	fields: {
-		Name: {type:'string', required: false, validator: /[a-zA-Z]{3,}/ }
+		Name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ }
 	},
 	connector: 'appc.mssql',
 	metadata: {

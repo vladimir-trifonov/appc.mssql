@@ -10,28 +10,7 @@ To install:
 $ appc install connector/appc.mssql --save
 ```
 
-Use in your application:
-
-```javascript
-var apibuilder = require('apibuilder'),
-	MSSQLConnector = require('appc.mssql').create(apibuilder),
-	connector = new MSSQLConnector({
-		server: 'localhost',
-		port: 1433,
-		user: '',
-		password: '',
-		database: 'test',
-		options: {
-			encrypt: true
-		}
-	});
-```
-
-By default we use `localhost`, and empty username and password.
-
-However, you must set a database.
-
-Now reference the connector in your model.
+Reference the connector in your model.
 
 ```javascript
 var Account = APIBuilder.Model.extend('Account',{

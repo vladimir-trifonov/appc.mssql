@@ -2,10 +2,10 @@ var should = require('should'),
 	async = require('async'),
 	url = require('url'),
 	sql = require('mssql'),
-	APIBuilder = require('apibuilder'),
-	Connector = require('../').create(APIBuilder),
-	log = APIBuilder.createLogger({}, { name: 'api-connector-mssql TEST', useConsole: true, level: 'info' }),
+	APIBuilder = require('appcelerator').apibuilder,
+	Connector = require('../lib').create(APIBuilder),
 	connector = new Connector(),
+	log = APIBuilder.createLogger({}, { name: 'api-connector-mssql TEST', useConsole: true, level: 'info' }),
 	Model;
 
 

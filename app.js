@@ -43,7 +43,7 @@ var Post = APIBuilder.createModel('post', {
 	},
 	connector: 'appc.mssql',
 	metadata: {
-		mssql: {
+		'appc.mssql': {
 			table: 'TEST_Post'
 		}
 	}

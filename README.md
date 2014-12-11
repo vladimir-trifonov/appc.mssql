@@ -30,7 +30,7 @@ var Account = APIBuilder.Model.extend('account',{
 	},
 	connector: 'appc.mssql',
 	metadata: {
-		mssql: {
+		'appc.mssql': {
 			table: 'accounts'
 		}
 	}

@@ -54,7 +54,4 @@ server.addModel(Post);
 server.authorization = APIKeyAuthorization;
 
 // start the server
-server.start(function(err) {
-	if (err) { server.logger.fatal(err); }
-	server.logger.info('server started on port', server.port);
-});
+server.start();

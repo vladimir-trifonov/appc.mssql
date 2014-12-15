@@ -3,8 +3,8 @@ var should = require('should'),
 	url = require('url'),
 	sql = require('mssql'),
 	APIBuilder = require('appcelerator').apibuilder,
-	Connector = require('../lib').create(APIBuilder),
-	connector = new Connector(),
+	server = new APIBuilder(),
+	connector = server.getConnector('appc.mssql'),
 	log = APIBuilder.createLogger({}, { name: 'api-connector-mssql TEST', useConsole: true, level: 'info' }),
 	Model;
 
@@ -20,12 +20,12 @@ describe('Connector', function() {
 				title: { type: String },
 				content: { type: String }
 			},
-			connector: connector
+			connector: 'appc.mssql'
 		});
 
 		should(Model).be.an.Object;
 
-		connector.connect(function(err) {
+		server.start(function(err) {
 			should(err).be.not.ok;
 
 			// Set up our testing table.
@@ -77,6 +77,7 @@ describe('Connector', function() {
 					});
 				}
 			], callback);
+
 		});
 	});
 
@@ -85,7 +86,7 @@ describe('Connector', function() {
 			if (err) {
 				log.error(err.message);
 			}
-			connector.disconnect(next);
+			server.stop(next);
 		});
 	});
 

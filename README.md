@@ -21,7 +21,7 @@ var Account = APIBuilder.Model.extend('Account',{
 });
 ```
 
-If you want to map a specific model to a specific sobject name, use metadata.  For example, to map the `account` model to the table named `accounts`, set it such as:
+If you want to map a specific model to a specific table, use metadata.  For example, to map the `account` model to the table named `accounts`, set it such as:
 
 ```javascript
 var Account = APIBuilder.Model.extend('account',{
@@ -36,6 +36,8 @@ var Account = APIBuilder.Model.extend('account',{
 	}
 });
 ```
+
+# Testing
 
 The tests will automatically create their own table named "TEST_Post".
 

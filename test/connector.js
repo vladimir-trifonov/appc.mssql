@@ -90,15 +90,6 @@ describe('Connector', function() {
 		});
 	});
 
-	it('should be able to fetch config', function(next) {
-		connector.fetchConfig(function(err, config) {
-			should(err).be.not.ok;
-			should(config).be.an.Object;
-			should(Object.keys(config)).containEql('mssql');
-			next();
-		});
-	});
-
 	it('should be able to fetch schema', function(next) {
 		connector.fetchSchema(function(err, schema) {
 			should(err).be.not.ok;

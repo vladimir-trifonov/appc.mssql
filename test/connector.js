@@ -303,4 +303,31 @@ describe('Connector', function() {
 
 	});
 
+	it('API-373: should be able to page and per_page', function(callback) {
+
+		var objects = [];
+		for (var i = 0; i < 20; i++) {
+			objects.push({
+				title: 'Title ' + i,
+				content: 'Content ' + i
+			});
+		}
+
+		Model.create(objects, function(err) {
+			should(err).be.not.ok;
+
+			Model.query({ page: 2, per_page: 4 }, function(err) {
+				// Order must be provided.
+				should(err).be.ok;
+
+				Model.query({ page: 2, per_page: 4, order: { title: 1 } }, function(err, coll) {
+					should(err).be.not.ok;
+					should(coll).be.ok;
+					callback();
+				});
+			});
+		});
+
+	});
+
 });

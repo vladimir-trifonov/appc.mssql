@@ -1,7 +1,7 @@
 {
 	"name": "appc.mssql",
 	"description": "MSSQL connector",
-	"version": "1.0.21",
+	"version": "1.0.22",
 	"author": "Dawson Toth",
 	"license": "",
 	"framework": "none",

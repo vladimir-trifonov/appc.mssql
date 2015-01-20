@@ -303,6 +303,14 @@ describe('Connector', function() {
 
 	});
 
+	it('API-377: should be able to query with just skip', function(callback) {
+		Model.query({ skip: 2 }, function(err, coll) {
+			should(err).be.not.ok;
+			should(coll).be.ok;
+			callback();
+		});
+	});
+
 	it('API-373: should be able to page and per_page', function(callback) {
 
 		var objects = [];
@@ -316,9 +324,9 @@ describe('Connector', function() {
 		Model.create(objects, function(err) {
 			should(err).be.not.ok;
 
-			Model.query({ page: 2, per_page: 4 }, function(err) {
-				// Order must be provided.
-				should(err).be.ok;
+			Model.query({ page: 2, per_page: 4 }, function(err, coll) {
+				should(err).be.not.ok;
+				should(coll).be.ok;
 
 				Model.query({ page: 2, per_page: 4, order: { title: 1 } }, function(err, coll) {
 					should(err).be.not.ok;

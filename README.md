@@ -13,7 +13,7 @@ $ appc install connector/appc.mssql --save
 Reference the connector in your model.
 
 ```javascript
-var Account = APIBuilder.Model.extend('Account',{
+var Account = Arrow.Model.extend('Account',{
 	fields: {
 		Name: { type: String, required: true, validator: /[a-zA-Z]{3,}/ }
 	},
@@ -24,7 +24,7 @@ var Account = APIBuilder.Model.extend('Account',{
 If you want to map a specific model to a specific table, use metadata.  For example, to map the `account` model to the table named `accounts`, set it such as:
 
 ```javascript
-var Account = APIBuilder.Model.extend('account',{
+var Account = Arrow.Model.extend('account',{
 	fields: {
 		Name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ }
 	},

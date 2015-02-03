@@ -2,10 +2,10 @@ var should = require('should'),
 	async = require('async'),
 	url = require('url'),
 	sql = require('mssql'),
-	APIBuilder = require('appcelerator').apibuilder,
-	server = new APIBuilder(),
+	Arrow = require('appcelerator').arrow,
+	server = new Arrow(),
 	connector = server.getConnector('appc.mssql'),
-	log = APIBuilder.createLogger({}, { name: 'api-connector-mssql TEST', useConsole: true, level: 'info' }),
+	log = Arrow.createLogger({}, { name: 'api-connector-mssql TEST', useConsole: true, level: 'info' }),
 	Model;
 
 
@@ -15,7 +15,7 @@ describe('Connector', function() {
 
 	before(function(callback) {
 		// define your model
-		Model = APIBuilder.Model.extend(testTableName, {
+		Model = Arrow.Model.extend(testTableName, {
 			fields: {
 				title: { type: String },
 				content: { type: String }

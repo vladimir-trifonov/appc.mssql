@@ -2,10 +2,10 @@ var should = require('should'),
 	async = require('async'),
 	url = require('url'),
 	sql = require('mssql'),
-	Arrow = require('appcelerator').arrow,
+	Arrow = require('arrow.js'),
 	server = new Arrow(),
 	connector = server.getConnector('appc.mssql'),
-	log = Arrow.createLogger({}, { name: 'api-connector-mssql TEST', useConsole: true, level: 'info' }),
+	log = Arrow.createLogger({}, { name: 'mssql TEST', useConsole: true, level: 'info' }),
 	Model;
 
 

@@ -1,7 +1,7 @@
 {
 	"name": "appc.mssql",
 	"description": "MSSQL connector",
-	"version": "1.0.23",
+	"version": "1.0.24",
 	"author": "Dawson Toth",
 	"license": "Appcelerator Commercial",
 	"framework": "none",
@@ -10,6 +10,10 @@
 		"arrow-connector",
 		"appc-cli-plugin",
 		"mssql",
+		"microsoft",
+		"microsoft sql",
+		"microsoft sql server",
+		"azure",
 		"appcelerator",
 		"appc-package-connector"
 	],
@@ -29,7 +33,7 @@
 		"pkginfo": "^0.3.0"
 	},
 	"devDependencies": {
-		"arrow.js": "*",
+		"arrow": "*",
 		"grunt": "^0.4.5",
 		"grunt-contrib-clean": "^0.6.0",
 		"grunt-contrib-jshint": "^0.10.0",

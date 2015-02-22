@@ -101,6 +101,7 @@ describe('Connector', function() {
 	it('API-346: should create models from tables', function() {
 		var TestPost = connector.getModel('appc.mssql/TEST_Post');
 		should(TestPost).be.ok;
+		should(TestPost.generated).be.true;
 		should(TestPost.fields).be.ok;
 		should(Object.keys(TestPost.fields).length).be.greaterThan(0);
 	});

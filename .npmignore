@@ -1,2 +1,11 @@
 node_modules
 logs
+*.tgz
+.jshintrc
+.travis.yml
+test
+appc.json
+Gruntfile.js
+conf/local.js
+appc.json
+app.js

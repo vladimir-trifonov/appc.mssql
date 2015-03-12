@@ -7,6 +7,8 @@ module.exports = {
 			port: 1433, // The port your server is using.
 			database: '', // Your database.
 
+			generateModelsFromSchema: true, // Generate models from your schema.
+
 			// If running on Azure, you'll want the following, too:
 			options: {
 				encrypt: true

@@ -1,9 +1,9 @@
 {
   "name": "appc.mssql",
   "description": "MSSQL connector",
-  "version": "1.0.28",
+  "version": "1.0.29",
   "author": "Dawson Toth",
-  "license": "Appcelerator Commercial",
+  "license": "Apache-2",
   "framework": "none",
   "keywords": [
     "arrow",

@@ -5,7 +5,8 @@ module.exports = {
 	apikey: '7OconkD1qE64SKasb3jt2MIgJZih5Th1',
 	admin: {
 		enabled: true,
-		prefix: '/arrow'
+		prefix: '/arrow',
+		disableAutoLogin: true
 	},
 	session: {
 		encryptionAlgorithm: 'aes256',

@@ -18,7 +18,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:appcelerator/api-connector-mssql.git"
+    "url": "git@github.com:appcelerator/appc.mssql.git"
   },
   "scripts": {
     "test": "grunt",

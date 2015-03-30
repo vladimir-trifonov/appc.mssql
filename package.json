@@ -1,7 +1,7 @@
 {
   "name": "appc.mssql",
   "description": "MSSQL connector",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "author": "Dawson Toth",
   "license": "Apache-2",
   "framework": "none",
@@ -22,7 +22,8 @@
   },
   "scripts": {
     "test": "grunt",
-    "start": "node ./app.js"
+    "start": "node ./app.js",
+    "preinstall": "node ./bin/update"
   },
   "private": true,
   "dependencies": {
@@ -32,6 +33,8 @@
     "pkginfo": "^0.3.0"
   },
   "devDependencies": {
+    "arrow": "0.3.148",
+    "ensure-latest": "^1.0.3",
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-jshint": "^0.10.0",
@@ -39,5 +42,6 @@
     "grunt-mocha-test": "^0.12.0",
     "mocha": "^1.21.4",
     "should": "^4.0.4"
-  }
+  },
+  "ensureLatest": [ "arrow" ]
 }

@@ -2,18 +2,18 @@
 
 This is an Arrow connector to Microsoft SQL Server (MSSQL).
 
-> This software is pre-release and not yet ready for usage.  Please don't use this just yet while we're working through testing and finishing it up. Once it's ready, we'll make an announcement about it.
-
-To install:
+## Installation
 
 ```bash
 $ appc install connector/appc.mssql --save
 ```
 
+## Usage
+
 Reference the connector in your model.
 
 ```javascript
-var Account = Arrow.Model.extend('Account',{
+var Account = Arrow.Model.extend('Account', {
 	fields: {
 		Name: { type: String, required: true, validator: /[a-zA-Z]{3,}/ }
 	},
@@ -21,10 +21,11 @@ var Account = Arrow.Model.extend('Account',{
 });
 ```
 
-If you want to map a specific model to a specific table, use metadata.  For example, to map the `account` model to the table named `accounts`, set it such as:
+If you want to map a specific model to a specific table, use metadata.
+For example, to map the `account` model to the table `accounts`, set it such as:
 
 ```javascript
-var Account = Arrow.Model.extend('account',{
+var Account = Arrow.Model.extend('account', {
 	fields: {
 		Name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ }
 	},
@@ -37,9 +38,24 @@ var Account = Arrow.Model.extend('account',{
 });
 ```
 
-# Testing
+## Development
+
+> This section is for individuals developing the MSSQL Connector and not intended
+  for end-users.
+
+```bash
+npm install
+node app.js
+```
+
+### Running Unit Tests
 
 The tests will automatically create their own table named "TEST_Post".
+
+```bash
+npm test
+```
+
 
 # Contributing
 

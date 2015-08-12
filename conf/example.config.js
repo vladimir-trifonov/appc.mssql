@@ -6,6 +6,8 @@ module.exports = {
 			server: '', // Your Azure server.
 			port: 1433, // The port your server is using.
 			database: '', // Your database.
+			connectionTimeout: 15000, // Connection timeout in MS.
+			requestTimeout: 15000, // Request timeout in MS.
 
 			generateModelsFromSchema: true, // Generate models from your schema.
 

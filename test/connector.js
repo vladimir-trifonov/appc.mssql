@@ -1,17 +1,17 @@
-var should = require('should'),
-	async = require('async'),
+var async = require('async'),
 	url = require('url'),
-	sql = require('mssql'),
-	Arrow = require('arrow'),
-	server = new Arrow(),
-	connector = server.getConnector('appc.mssql'),
-	log = Arrow.createLogger({}, {name: 'mssql TEST', useConsole: true, level: 'info'}),
-	Model;
+	sql = require('mssql');
 
+var should = require('should'),
+	Arrow = require('arrow'),
+	common = require('./common'),
+	server = common.server,
+	connector = server.getConnector('appc.mssql');
 
 describe('Connector', function () {
 
-	var testTableName = 'TEST_Post';
+	var Model,
+		testTableName = 'TEST_Post';
 
 	before(function (callback) {
 		// define your model
@@ -25,111 +25,107 @@ describe('Connector', function () {
 
 		should(Model).be.an.Object;
 
-		server.start(function (err) {
-			should(err).be.not.ok;
+		// Set up our testing table.
+		var connection = connector.connection;
+		async.series([
+			function (next) {
+				var request = new sql.Request(connection);
+				request.query('DROP TABLE ' + testTableName, function (err) {
+					if (!err || String(err).indexOf('because it does not exist') >= 0) {
+						next();
+					}
+					else {
+						callback(err);
+					}
+				});
+			},
+			function (next) {
+				var request = new sql.Request(connection);
+				request.query('DROP TABLE ' + testTableName + '2', function (err) {
+					if (!err || String(err).indexOf('because it does not exist') >= 0) {
+						next();
+					}
+					else {
+						callback(err);
+					}
+				});
+			},
+			function (next) {
+				var request = new sql.Request(connection);
+				request.query('CREATE TABLE ' + testTableName + ' (id INT IDENTITY, title VARCHAR(255), content VARCHAR(255))',
+					function (err) {
+						if (!err || String(err).indexOf('There is already an object named') >= 0) {
+							next();
+						}
+						else {
+							callback(err);
+						}
+					});
+			},
+			function (next) {
+				var request = new sql.Request(connection);
+				request.query('CREATE UNIQUE CLUSTERED INDEX Idx_' + testTableName + ' ON ' + testTableName + '(id)', function (err) {
+					if (!err || String(err).indexOf('already exists on table') >= 0) {
+						next();
+					}
+					else {
+						callback(err);
+					}
+				});
+			},
+			function (next) {
+				var request = new sql.Request(connection);
+				request.query('ALTER TABLE ' + testTableName + ' ADD CONSTRAINT PK_' + testTableName + ' PRIMARY KEY(id)', function (err) {
+					if (!err || String(err).indexOf('already exists on table') >= 0) {
+						next();
+					}
+					else {
+						callback(err);
+					}
+				});
+			},
+			function (next) {
+				var request = new sql.Request(connection);
+				request.query('CREATE TABLE ' + testTableName + '2 (id INT IDENTITY, amount INT, timestamp)',
+					function (err) {
+						if (!err || String(err).indexOf('There is already an object named') >= 0) {
+							next();
+						}
+						else {
+							callback(err);
+						}
+					});
+			},
+			function (next) {
+				var request = new sql.Request(connection);
+				request.query('CREATE UNIQUE CLUSTERED INDEX Idx_' + testTableName + '2 ON ' + testTableName + '2(id)', function (err) {
+					if (!err || String(err).indexOf('already exists on table') >= 0) {
+						next();
+					}
+					else {
+						callback(err);
+					}
+				});
+			},
+			function (next) {
+				var request = new sql.Request(connection);
+				request.query('ALTER TABLE ' + testTableName + '2 ADD CONSTRAINT PK_' + testTableName + '2 PRIMARY KEY(id)', function (err) {
+					if (!err || String(err).indexOf('already exists on table') >= 0) {
+						next();
+					}
+					else {
+						callback(err);
+					}
+				});
+			}
+		], callback);
 
-			// Set up our testing table.
-			var connection = connector.connection;
-			async.series([
-				function (next) {
-					var request = new sql.Request(connection);
-					request.query('DROP TABLE ' + testTableName, function (err) {
-						if (!err || String(err).indexOf('because it does not exist') >= 0) {
-							next();
-						}
-						else {
-							callback(err);
-						}
-					});
-				},
-				function (next) {
-					var request = new sql.Request(connection);
-					request.query('DROP TABLE ' + testTableName + '2', function (err) {
-						if (!err || String(err).indexOf('because it does not exist') >= 0) {
-							next();
-						}
-						else {
-							callback(err);
-						}
-					});
-				},
-				function (next) {
-					var request = new sql.Request(connection);
-					request.query('CREATE TABLE ' + testTableName + ' (id INT IDENTITY, title VARCHAR(255), content VARCHAR(255))',
-						function (err) {
-							if (!err || String(err).indexOf('There is already an object named') >= 0) {
-								next();
-							}
-							else {
-								callback(err);
-							}
-						});
-				},
-				function (next) {
-					var request = new sql.Request(connection);
-					request.query('CREATE UNIQUE CLUSTERED INDEX Idx_' + testTableName + ' ON ' + testTableName + '(id)', function (err) {
-						if (!err || String(err).indexOf('already exists on table') >= 0) {
-							next();
-						}
-						else {
-							callback(err);
-						}
-					});
-				},
-				function (next) {
-					var request = new sql.Request(connection);
-					request.query('ALTER TABLE ' + testTableName + ' ADD CONSTRAINT PK_' + testTableName + ' PRIMARY KEY(id)', function (err) {
-						if (!err || String(err).indexOf('already exists on table') >= 0) {
-							next();
-						}
-						else {
-							callback(err);
-						}
-					});
-				},
-				function (next) {
-					var request = new sql.Request(connection);
-					request.query('CREATE TABLE ' + testTableName + '2 (id INT IDENTITY, amount INT, timestamp)',
-						function (err) {
-							if (!err || String(err).indexOf('There is already an object named') >= 0) {
-								next();
-							}
-							else {
-								callback(err);
-							}
-						});
-				},
-				function (next) {
-					var request = new sql.Request(connection);
-					request.query('CREATE UNIQUE CLUSTERED INDEX Idx_' + testTableName + '2 ON ' + testTableName + '2(id)', function (err) {
-						if (!err || String(err).indexOf('already exists on table') >= 0) {
-							next();
-						}
-						else {
-							callback(err);
-						}
-					});
-				},
-				function (next) {
-					var request = new sql.Request(connection);
-					request.query('ALTER TABLE ' + testTableName + '2 ADD CONSTRAINT PK_' + testTableName + '2 PRIMARY KEY(id)', function (err) {
-						if (!err || String(err).indexOf('already exists on table') >= 0) {
-							next();
-						}
-						else {
-							callback(err);
-						}
-					});
-				}
-			], callback);
-
-		});
 	});
 
 	after(function (next) {
 		Model.deleteAll(function (err) {
 			if (err) {
-				log.error(err.message);
+				console.error(err.message);
 			}
 			server.stop(next);
 		});
@@ -354,8 +350,17 @@ describe('Connector', function () {
 					should(obj.getPrimaryKey()).be.a.Number;
 					should(obj.title).be.not.ok;
 					should(obj.content).be.a.String;
-					obj.remove(next);
-				}, callback);
+					next();
+				}, function () {
+					delete options.sel;
+					options.unsel = {title: 1};
+					Model.query(options, function (err, coll) {
+						should(err).be.not.ok;
+						should(coll[0].title).be.not.ok;
+						should(coll[0].content).be.ok;
+						instance.remove(callback);
+					});
+				});
 			});
 		});
 

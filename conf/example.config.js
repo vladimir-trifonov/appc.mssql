@@ -9,7 +9,11 @@ module.exports = {
 			connectionTimeout: 15000, // Connection timeout in MS.
 			requestTimeout: 15000, // Request timeout in MS.
 
-			generateModelsFromSchema: true, // Generate models from your schema.
+			// Create models based on your schema that can be used in your API.
+			generateModelsFromSchema: true,
+
+			// Whether or not to generate APIs based on the methods in generated models. 
+			modelAutogen: false,
 
 			// If running on Azure, you'll want the following, too:
 			options: {

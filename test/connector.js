@@ -52,6 +52,17 @@ describe('Connector', function () {
 			},
 			function (next) {
 				var request = new sql.Request(connection);
+				request.query('DROP TABLE ' + testTableName + '3', function (err) {
+					if (!err || String(err).indexOf('because it does not exist') >= 0) {
+						next();
+					}
+					else {
+						callback(err);
+					}
+				});
+			},
+			function (next) {
+				var request = new sql.Request(connection);
 				request.query('CREATE TABLE ' + testTableName + ' (id INT IDENTITY, title VARCHAR(255), content VARCHAR(255))',
 					function (err) {
 						if (!err || String(err).indexOf('There is already an object named') >= 0) {
@@ -117,6 +128,40 @@ describe('Connector', function () {
 						callback(err);
 					}
 				});
+			},
+			function (next) {
+				var request = new sql.Request(connection);
+				request.query('CREATE TABLE ' + testTableName + '3 (rid INT IDENTITY, amount INT, timestamp)',
+					function (err) {
+						if (!err || String(err).indexOf('There is already an object named') >= 0) {
+							next();
+						}
+						else {
+							callback(err);
+						}
+					});
+			},
+			function (next) {
+				var request = new sql.Request(connection);
+				request.query('CREATE UNIQUE CLUSTERED INDEX Idx_' + testTableName + '3 ON ' + testTableName + '3(rid)', function (err) {
+					if (!err || String(err).indexOf('already exists on table') >= 0) {
+						next();
+					}
+					else {
+						callback(err);
+					}
+				});
+			},
+			function (next) {
+				var request = new sql.Request(connection);
+				request.query('ALTER TABLE ' + testTableName + '3 ADD CONSTRAINT PK_' + testTableName + '3 PRIMARY KEY(rid)', function (err) {
+					if (!err || String(err).indexOf('already exists on table') >= 0) {
+						next();
+					}
+					else {
+						callback(err);
+					}
+				});
 			}
 		], callback);
 
@@ -144,6 +189,21 @@ describe('Connector', function () {
 		should(TestPost).be.ok;
 		should(TestPost.generated).be.true;
 		should(TestPost.fields).be.ok;
+		should(Object.keys(TestPost.fields).length).be.greaterThan(0);
+	});
+
+	it('API-733: should expose non-id named primary keys as columns', function () {
+		var TestPost = connector.getModel('appc.mssql/' + testTableName + '3');
+		should(TestPost).be.ok;
+		should(TestPost.generated).be.true;
+		should(TestPost.fields).be.ok;
+		should(TestPost.fields).have.property('rid', {
+			type: 'number',
+			required: false,
+			readonly: false,
+			custom: false,
+			optional: true
+		});
 		should(Object.keys(TestPost.fields).length).be.greaterThan(0);
 	});
 

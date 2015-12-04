@@ -304,14 +304,15 @@ describe('Connector', function () {
 				should(err).be.not.ok;
 				should(coll2.length).equal(coll.length);
 
-				var array = [];
-
-				coll2.forEach(function (post, i) {
-					should(post.getPrimaryKey()).equal(keys[i]);
-					array.push(post);
+				var keys2 = [];
+				coll2.forEach(function (post) {
+					keys2.push(post.getPrimaryKey());
 				});
+				keys.sort();
+				keys2.sort();
+				should.deepEqual(keys, keys2);
 
-				async.eachSeries(array, function (post, next_) {
+				async.eachSeries(coll2, function (post, next_) {
 					should(post).be.an.Object;
 					post.delete(next_);
 				}, function (err) {

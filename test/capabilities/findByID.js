@@ -1,6 +1,6 @@
 var should = require('should');
 
-exports.findOne = {
+exports.findByID = {
 	insert: {
 		title: 'Jeff Haynie'
 	},

@@ -192,21 +192,6 @@ describe('Connector', function () {
 		should(Object.keys(TestPost.fields).length).be.greaterThan(0);
 	});
 
-	it('API-733: should expose non-id named primary keys as columns', function () {
-		var TestPost = connector.getModel('appc.mssql/' + testTableName + '3');
-		should(TestPost).be.ok;
-		should(TestPost.generated).be.true;
-		should(TestPost.fields).be.ok;
-		should(TestPost.fields).have.property('rid', {
-			type: 'number',
-			required: false,
-			readonly: false,
-			custom: false,
-			optional: true
-		});
-		should(Object.keys(TestPost.fields).length).be.greaterThan(0);
-	});
-
 	it('should be able to fetch schema with post table', function (next) {
 		connector.fetchSchema(function (err, schema) {
 			should(err).be.not.ok;

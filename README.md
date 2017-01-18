@@ -5,7 +5,7 @@ This is an Arrow connector to Microsoft SQL Server (MSSQL).
 ## Installation
 
 ```bash
-$ appc install connector/appc.mssql --save
+$ appc install connector/appc.mssql
 ```
 
 ## Usage

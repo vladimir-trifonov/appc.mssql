@@ -1,7 +1,7 @@
 {
   "name": "appc.mssql",
   "description": "MSSQL connector",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "author": "Dawson Toth",
   "maintainers": [
     "Dawson Toth <dtoth@appcelerator.com>"

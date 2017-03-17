@@ -18,10 +18,11 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('FindOne with console.warn', sinon.test(function (t) {
+test('FindOne with console.warn', function (t) {
   const logger = CONNECTOR.logger
+  const sandbox = sinon.sandbox.create()
 
-  const findByIdStub = this.stub(
+  const findByIdStub = sandbox.stub(
     CONNECTOR.findByID,
     'apply',
     (values) => { }
@@ -34,17 +35,19 @@ test('FindOne with console.warn', sinon.test(function (t) {
   t.ok(findByIdStub.calledOnce)
 
   CONNECTOR.logger = logger
+  sandbox.restore()
   t.end()
-}))
+})
 
-test('FindOne with logger', sinon.test(function (t) {
-  const findByIdStub = this.stub(
+test('FindOne with logger', function (t) {
+  const sandbox = sinon.sandbox.create()
+  const findByIdStub = sandbox.stub(
     CONNECTOR.findByID,
     'apply',
     (values) => { }
   )
 
-  const loggerStub = this.stub(CONNECTOR.logger,
+  const loggerStub = sandbox.stub(CONNECTOR.logger,
     'warn',
     (CONNECTOR) => { }
   )
@@ -54,8 +57,9 @@ test('FindOne with logger', sinon.test(function (t) {
   t.ok(loggerStub.calledOnce)
   t.ok(findByIdStub.calledOnce)
 
+  sandbox.restore()
   t.end()
-}))
+})
 
 test('### Stop Arrow ###', function (t) {
   ARROW.stop(function () {

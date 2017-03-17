@@ -66,9 +66,10 @@ test('### Create without result ###', function (t) {
   createMethod.bind(CONNECTOR, Model, values, cbSpy)()
   setImmediate(function () {
     t.ok(getTableNameStub.calledOnce)
+    t.ok(getTableNameStub.calledWith(Model))
     t.ok(getPrimaryKeyColumnStub.calledOnce)
+    t.ok(getPrimaryKeyColumnStub.calledWith(Model))
     t.ok(sqlStub.calledOnce)
-// t.ok(transformRow.calledOnce)
     t.ok(addValuesToSQLRequestStub.calledOnce)
     t.ok(cbSpy.calledOnce)
     t.ok(cbSpy.calledWithExactly())
@@ -77,7 +78,7 @@ test('### Create without result ###', function (t) {
   })
 })
 
-test('### Create no error ###', function (t) {
+test('### Create successfully###', function (t) {
   // Data
   var sandbox = sinon.sandbox.create()
   const Model = ARROW.getModel('Posts')
@@ -124,7 +125,9 @@ test('### Create no error ###', function (t) {
   createMethod.bind(CONNECTOR, Model, values, cbSpy)()
   setImmediate(function () {
     t.ok(getTableNameStub.calledOnce)
+    t.ok(getTableNameStub.calledWith(Model))
     t.ok(getPrimaryKeyColumnStub.calledOnce)
+    t.ok(getPrimaryKeyColumnStub.calledWith(Model))
     t.ok(sqlStub.calledOnce)
     t.ok(transformRow.calledOnce)
     t.ok(addValuesToSQLRequestStub.calledOnce)
@@ -178,11 +181,72 @@ test('### Create error case ###', function (t) {
   createMethod.bind(CONNECTOR, Model, values, cbSpy)()
   setImmediate(function () {
     t.ok(getTableNameStub.calledOnce)
+    t.ok(getTableNameStub.calledWith(Model))
     t.ok(getPrimaryKeyColumnStub.calledOnce)
+    t.ok(getPrimaryKeyColumnStub.calledWith(Model))
     t.ok(sqlStub.calledOnce)
     t.ok(addValuesToSQLRequestStub.calledOnce)
     t.ok(cbSpy.calledOnce)
     t.ok(cbSpy.calledWith('err'))
+    sandbox.restore()
+    t.end()
+  })
+})
+
+test('### Create successfully without primary key ###', function (t) {
+  // Data
+  var sandbox = sinon.sandbox.create()
+  const Model = ARROW.getModel('Posts')
+  Model.instance = function (values, skip) {
+    return {
+      title: 'test',
+      content: 'test content',
+      toPayload () {
+        return ['test', 'test content']
+      },
+      setPrimaryKey (id) { }
+    }
+  }
+
+  const values = 'someValues'
+
+  // Stubs & spies
+  const getTableNameStub = sandbox.stub(CONNECTOR, 'getTableName', function (Model) {
+    return 'Posts'
+  })
+
+  const getPrimaryKeyColumnStub = sandbox.stub(CONNECTOR, 'getPrimaryKeyColumn', function (Model) {
+    return undefined
+  })
+
+  const sqlStub = sandbox.stub(
+    sql,
+    'Request',
+    (connection) => {
+      return {
+        query: function (query, createQueryCallback) {
+          setImmediate(function () { createQueryCallback(null, [{ title: 'Test' }]) })
+        }
+      }
+    }
+  )
+
+  const addValuesToSQLRequestStub = sandbox.stub(CONNECTOR, 'addValuesToSQLRequest', function (Model, values, request, excludeTimeStamp) { })
+  const transformRow = sandbox.stub(CONNECTOR, 'transformRow', function (Model, row) { return row })
+  function cb (errParameter, instance) { }
+  const cbSpy = sandbox.spy(cb)
+
+  // Execution
+  createMethod.bind(CONNECTOR, Model, values, cbSpy)()
+  setImmediate(function () {
+    t.ok(getTableNameStub.calledOnce)
+    t.ok(getTableNameStub.calledWith(Model))
+    t.ok(getPrimaryKeyColumnStub.calledOnce)
+    t.ok(getPrimaryKeyColumnStub.calledWith(Model))
+    t.ok(sqlStub.calledOnce)
+    t.ok(transformRow.calledOnce)
+    t.ok(addValuesToSQLRequestStub.calledOnce)
+    t.ok(cbSpy.calledOnce)
     sandbox.restore()
     t.end()
   })

@@ -74,6 +74,8 @@ test('Delete method test - query error case', function (t) {
 
   const loggerDebugStub = sandbox.stub(CONNECTOR.logger, 'debug', function (message) { })
 
+  const loggerTraceStub = sandbox.stub(CONNECTOR.logger, 'trace', function (message) { })
+
   function input (name, type, value) { }
   const inputSpy = sandbox.spy(input)
 
@@ -105,6 +107,7 @@ test('Delete method test - query error case', function (t) {
     t.ok(getPrimaryKeyColumnStub.calledOnce)
     t.ok(getPrimaryKeyColumnStub.calledWithExactly(model))
     t.ok(loggerDebugStub.calledTwice)
+    t.ok(loggerTraceStub.calledOnce)
     t.ok(sqlRequestStub.calledOnce)
     t.ok(inputSpy.calledOnce)
     t.ok(querySpy.calledOnce)
@@ -138,6 +141,8 @@ test('Delete method test - success case', function (t) {
 
   const loggerDebugStub = sandbox.stub(CONNECTOR.logger, 'debug', function (message) { })
 
+  const loggerTraceStub = sandbox.stub(CONNECTOR.logger, 'trace', function (message) { })
+
   function input (name, type, value) { }
   const inputSpy = sandbox.spy(input)
 
@@ -170,6 +175,7 @@ test('Delete method test - success case', function (t) {
     t.ok(getPrimaryKeyColumnStub.calledOnce)
     t.ok(getPrimaryKeyColumnStub.calledWithExactly(model))
     t.ok(loggerDebugStub.calledTwice)
+    t.ok(loggerTraceStub.calledOnce)
     t.ok(sqlRequestStub.calledOnce)
     t.ok(inputSpy.calledOnce)
     t.ok(querySpy.calledOnce)
@@ -202,6 +208,8 @@ test('Delete method test - nothing to delete', function (t) {
 
   const loggerDebugStub = sandbox.stub(CONNECTOR.logger, 'debug', function (message) { })
 
+  const loggerTraceStub = sandbox.stub(CONNECTOR.logger, 'trace', function (message) { })
+
   function input (name, type, value) { }
   const inputSpy = sandbox.spy(input)
 
@@ -232,6 +240,7 @@ test('Delete method test - nothing to delete', function (t) {
     t.ok(getPrimaryKeyColumnStub.calledOnce)
     t.ok(getPrimaryKeyColumnStub.calledWithExactly(model))
     t.ok(loggerDebugStub.calledTwice)
+    t.ok(loggerTraceStub.calledOnce)
     t.ok(sqlRequestStub.calledOnce)
     t.ok(inputSpy.calledOnce)
     t.ok(querySpy.calledOnce)

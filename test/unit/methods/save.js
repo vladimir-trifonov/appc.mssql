@@ -1,6 +1,7 @@
 const test = require('tap').test
 const sinon = require('sinon')
 const sql = require('mssql')
+const _ = require('lodash')
 const server = require('../../server')
 const saveMethod = require('../../../lib/methods/save').save
 var ARROW
@@ -8,20 +9,20 @@ var CONNECTOR
 
 test('### Start Arrow ###', function (t) {
   server()
-        .then((inst) => {
-          ARROW = inst
-          CONNECTOR = ARROW.getConnector('appc.mssql')
+    .then((inst) => {
+      ARROW = inst
+      CONNECTOR = ARROW.getConnector('appc.mssql')
 
-          t.ok(ARROW, 'Arrow has been started')
-          t.end()
-        })
-        .catch((err) => {
-          t.threw(err)
-        })
+      t.ok(ARROW, 'Arrow has been started')
+      t.end()
+    })
+    .catch((err) => {
+      t.threw(err)
+    })
 })
 
 test('### Save without result ###', function (t) {
-    // Data
+  // Data
   var sandbox = sinon.sandbox.create()
   const Model = ARROW.getModel('Posts')
   Model.instance = function (values, skip) {
@@ -36,7 +37,12 @@ test('### Save without result ###', function (t) {
     }
   }
 
-    // Stubs & spies
+  // Stubs & spies
+  const loggerDebugStub = sandbox.stub(CONNECTOR.logger, 'debug', function (message) { })
+  const loggerTraceStub = sandbox.stub(CONNECTOR.logger, 'trace', function (message) { })
+
+  const _keysStub = sandbox.stub(_, 'keys', function (payload) { return ['0', '1'] })
+  const _withoutStub = sandbox.stub(_, 'without', function (payload) { return ['0', '1'] })
   const getTableNameStub = sandbox.stub(CONNECTOR, 'getTableName', function (Model) {
     return 'Posts'
   })
@@ -47,25 +53,29 @@ test('### Save without result ###', function (t) {
   var instance = Model.instance({ title: test, content: 'test content' }, false)
 
   const sqlStub = sandbox.stub(
-        sql,
-        'Request',
-        (connection) => {
-          return {
-            input: function (param, varChar, id) { },
-            query: function (query, saveQueryCallback) {
-              setImmediate(function () { saveQueryCallback(null, []) })
-            }
-          }
+    sql,
+    'Request',
+    (connection) => {
+      return {
+        input: function (param, varChar, id) { },
+        query: function (query, saveQueryCallback) {
+          setImmediate(function () { saveQueryCallback(null, []) })
         }
-    )
+      }
+    }
+  )
 
   const addValuesToSQLRequestStub = sandbox.stub(CONNECTOR, 'addValuesToSQLRequest', function (Model, values, request, excludeTimeStamp) { })
   function cb (errParameter, instance) { }
   const cbSpy = sandbox.spy(cb)
 
-    // Execution
+  // Execution
   saveMethod.bind(CONNECTOR, Model, instance, cbSpy)()
   setImmediate(function () {
+    t.ok(_keysStub.calledOnce)
+    t.ok(_withoutStub.calledOnce)
+    t.ok(loggerDebugStub.calledTwice)
+    t.ok(loggerTraceStub.calledOnce)
     t.ok(getTableNameStub.calledOnce)
     t.ok(getPrimaryKeyColumnStub.calledOnce)
     t.ok(sqlStub.calledOnce)
@@ -78,7 +88,7 @@ test('### Save without result ###', function (t) {
 })
 
 test('### Save successfully ###', function (t) {
-    // Data
+  // Data
   var sandbox = sinon.sandbox.create()
   const Model = ARROW.getModel('Posts')
   Model.instance = function (values, skip) {
@@ -93,7 +103,13 @@ test('### Save successfully ###', function (t) {
     }
   }
 
-    // Stubs & spies
+  // Stubs & spies
+  const loggerDebugStub = sandbox.stub(CONNECTOR.logger, 'debug', function (message) { })
+  const loggerTraceStub = sandbox.stub(CONNECTOR.logger, 'trace', function (message) { })
+
+  const _keysStub = sandbox.stub(_, 'keys', function (payload) { return ['0', '1'] })
+  const _withoutStub = sandbox.stub(_, 'without', function (payload) { return ['0', '1'] })
+
   const getTableNameStub = sandbox.stub(CONNECTOR, 'getTableName', function (Model) {
     return 'Posts'
   })
@@ -104,26 +120,30 @@ test('### Save successfully ###', function (t) {
   var instance = Model.instance({ title: test, content: 'test content' }, false)
 
   const sqlStub = sandbox.stub(
-        sql,
-        'Request',
-        (connection) => {
-          return {
-            input: function (param, varChar, id) { },
-            query: function (query, saveQueryCallback) {
-              setImmediate(function () { saveQueryCallback(null, [{ title: 'test' }]) })
-            }
-          }
+    sql,
+    'Request',
+    (connection) => {
+      return {
+        input: function (param, varChar, id) { },
+        query: function (query, saveQueryCallback) {
+          setImmediate(function () { saveQueryCallback(null, [{ title: 'test' }]) })
         }
-    )
+      }
+    }
+  )
 
   const addValuesToSQLRequestStub = sandbox.stub(CONNECTOR, 'addValuesToSQLRequest', function (Model, values, request, excludeTimeStamp) { })
   const transformRow = sandbox.stub(CONNECTOR, 'transformRow', function (Model, row) { return row })
   function cb (errParameter, instance) { }
   const cbSpy = sandbox.spy(cb)
 
-    // Execution
+  // Execution
   saveMethod.bind(CONNECTOR, Model, instance, cbSpy)()
   setImmediate(function () {
+    t.ok(_keysStub.calledOnce)
+    t.ok(_withoutStub.calledOnce)
+    t.ok(loggerDebugStub.calledTwice)
+    t.ok(loggerTraceStub.calledOnce)
     t.ok(getTableNameStub.calledOnce)
     t.ok(getPrimaryKeyColumnStub.calledOnce)
     t.ok(sqlStub.calledOnce)
@@ -136,7 +156,7 @@ test('### Save successfully ###', function (t) {
 })
 
 test('### Save successfully without primary key ###', function (t) {
-    // Data
+  // Data
   var sandbox = sinon.sandbox.create()
   const Model = ARROW.getModel('Posts')
   Model.instance = function (values, skip) {
@@ -151,7 +171,13 @@ test('### Save successfully without primary key ###', function (t) {
     }
   }
 
-    // Stubs & spies
+  // Stubs & spies
+  const loggerDebugStub = sandbox.stub(CONNECTOR.logger, 'debug', function (message) { })
+  const loggerTraceStub = sandbox.stub(CONNECTOR.logger, 'trace', function (message) { })
+
+  const _keysStub = sandbox.stub(_, 'keys', function (payload) { return ['0', '1'] })
+  const _withoutStub = sandbox.stub(_, 'without', function (payload) { return ['0', '1'] })
+
   const getTableNameStub = sandbox.stub(CONNECTOR, 'getTableName', function (Model) {
     return 'Posts'
   })
@@ -162,26 +188,30 @@ test('### Save successfully without primary key ###', function (t) {
   var instance = Model.instance({ title: test, content: 'test content' }, false)
 
   const sqlStub = sandbox.stub(
-        sql,
-        'Request',
-        (connection) => {
-          return {
-            input: function (param, varChar, id) { },
-            query: function (query, saveQueryCallback) {
-              setImmediate(function () { saveQueryCallback(null, [{ title: 'test' }]) })
-            }
-          }
+    sql,
+    'Request',
+    (connection) => {
+      return {
+        input: function (param, varChar, id) { },
+        query: function (query, saveQueryCallback) {
+          setImmediate(function () { saveQueryCallback(null, [{ title: 'test' }]) })
         }
-    )
+      }
+    }
+  )
 
   const addValuesToSQLRequestStub = sandbox.stub(CONNECTOR, 'addValuesToSQLRequest', function (Model, values, request, excludeTimeStamp) { })
   const transformRow = sandbox.stub(CONNECTOR, 'transformRow', function (Model, row) { return row })
   function cb (errParameter, instance) { }
   const cbSpy = sandbox.spy(cb)
 
-    // Execution
+  // Execution
   saveMethod.bind(CONNECTOR, Model, instance, cbSpy)()
   setImmediate(function () {
+    t.ok(_keysStub.calledOnce)
+    t.ok(_withoutStub.calledOnce)
+    t.ok(loggerDebugStub.calledTwice)
+    t.ok(loggerTraceStub.calledOnce)
     t.ok(getTableNameStub.calledOnce)
     t.ok(getPrimaryKeyColumnStub.calledOnce)
     t.ok(sqlStub.calledOnce)
@@ -194,7 +224,7 @@ test('### Save successfully without primary key ###', function (t) {
 })
 
 test('### Save error case###', function (t) {
-    // Data
+  // Data
   var sandbox = sinon.sandbox.create()
   const Model = ARROW.getModel('Posts')
   Model.instance = function (values, skip) {
@@ -209,7 +239,13 @@ test('### Save error case###', function (t) {
     }
   }
 
-    // Stubs & spies
+  // Stubs & spies
+  const loggerDebugStub = sandbox.stub(CONNECTOR.logger, 'debug', function (message) { })
+  const loggerTraceStub = sandbox.stub(CONNECTOR.logger, 'trace', function (message) { })
+
+  const _keysStub = sandbox.stub(_, 'keys', function (payload) { return ['0', '1'] })
+  const _withoutStub = sandbox.stub(_, 'without', function (payload) { return ['0', '1'] })
+
   const getTableNameStub = sandbox.stub(CONNECTOR, 'getTableName', function (Model) {
     return 'Posts'
   })
@@ -220,25 +256,29 @@ test('### Save error case###', function (t) {
   var instance = Model.instance({ title: test, content: 'test content' }, false)
 
   const sqlStub = sandbox.stub(
-        sql,
-        'Request',
-        (connection) => {
-          return {
-            input: function (param, varChar, id) { },
-            query: function (query, saveQueryCallback) {
-              setImmediate(function () { saveQueryCallback('err', []) })
-            }
-          }
+    sql,
+    'Request',
+    (connection) => {
+      return {
+        input: function (param, varChar, id) { },
+        query: function (query, saveQueryCallback) {
+          setImmediate(function () { saveQueryCallback('err', []) })
         }
-    )
+      }
+    }
+  )
 
   const addValuesToSQLRequestStub = sandbox.stub(CONNECTOR, 'addValuesToSQLRequest', function (Model, values, request, excludeTimeStamp) { })
   function cb (errParameter, instance) { }
   const cbSpy = sandbox.spy(cb)
 
-    // Execution
+  // Execution
   saveMethod.bind(CONNECTOR, Model, instance, cbSpy)()
   setImmediate(function () {
+    t.ok(_keysStub.calledOnce)
+    t.ok(_withoutStub.calledOnce)
+    t.ok(loggerDebugStub.calledTwice)
+    t.ok(loggerTraceStub.calledOnce)
     t.ok(getTableNameStub.calledOnce)
     t.ok(getPrimaryKeyColumnStub.calledOnce)
     t.ok(sqlStub.calledOnce)

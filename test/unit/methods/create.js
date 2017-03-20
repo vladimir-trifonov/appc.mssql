@@ -1,5 +1,6 @@
 const test = require('tap').test
 const sinon = require('sinon')
+const _ = require('lodash')
 const sql = require('mssql')
 const server = require('../../server')
 const createMethod = require('../../../lib/methods/create').create
@@ -38,6 +39,11 @@ test('### Create without result ###', function (t) {
   const values = 'someValues'
 
   // Stubs & spies
+  const loggerDebugStub = sandbox.stub(CONNECTOR.logger, 'debug', function (message) { })
+
+  const _keysStub = sandbox.stub(_, 'keys', function (payload) { return ['0', '1'] })
+  const _withoutStub = sandbox.stub(_, 'without', function (payload) { return ['0', '1'] })
+
   const getTableNameStub = sandbox.stub(CONNECTOR, 'getTableName', function (Model) {
     return 'Posts'
   })
@@ -65,6 +71,9 @@ test('### Create without result ###', function (t) {
   // Execution
   createMethod.bind(CONNECTOR, Model, values, cbSpy)()
   setImmediate(function () {
+    t.ok(_keysStub.calledOnce)
+    t.ok(_withoutStub.calledOnce)
+    t.ok(loggerDebugStub.calledTwice)
     t.ok(getTableNameStub.calledOnce)
     t.ok(getTableNameStub.calledWith(Model))
     t.ok(getPrimaryKeyColumnStub.calledOnce)
@@ -96,6 +105,12 @@ test('### Create successfully###', function (t) {
   const values = 'someValues'
 
   // Stubs & spies
+  const loggerDebugStub = sandbox.stub(CONNECTOR.logger, 'debug', function (message) { })
+  const loggerTraceStub = sandbox.stub(CONNECTOR.logger, 'trace', function (message) { })
+
+  const _keysStub = sandbox.stub(_, 'keys', function (payload) { return ['0', '1'] })
+  const _withoutStub = sandbox.stub(_, 'without', function (payload) { return ['0', '1'] })
+
   const getTableNameStub = sandbox.stub(CONNECTOR, 'getTableName', function (Model) {
     return 'Posts'
   })
@@ -124,6 +139,10 @@ test('### Create successfully###', function (t) {
   // Execution
   createMethod.bind(CONNECTOR, Model, values, cbSpy)()
   setImmediate(function () {
+    t.ok(_keysStub.calledOnce)
+    t.ok(_withoutStub.calledOnce)
+    t.ok(loggerDebugStub.calledTwice)
+    t.ok(loggerTraceStub.calledOnce)
     t.ok(getTableNameStub.calledOnce)
     t.ok(getTableNameStub.calledWith(Model))
     t.ok(getPrimaryKeyColumnStub.calledOnce)
@@ -153,6 +172,12 @@ test('### Create error case ###', function (t) {
   }
   const values = 'someValues'
   // Stubs & spies
+  const loggerDebugStub = sandbox.stub(CONNECTOR.logger, 'debug', function (message) { })
+  const loggerTraceStub = sandbox.stub(CONNECTOR.logger, 'trace', function (message) { })
+
+  const _keysStub = sandbox.stub(_, 'keys', function (payload) { return ['0', '1'] })
+  const _withoutStub = sandbox.stub(_, 'without', function (payload) { return ['0', '1'] })
+
   const getTableNameStub = sandbox.stub(CONNECTOR, 'getTableName', function (Model) {
     return 'Posts'
   })
@@ -180,6 +205,10 @@ test('### Create error case ###', function (t) {
   // Execution
   createMethod.bind(CONNECTOR, Model, values, cbSpy)()
   setImmediate(function () {
+    t.ok(_keysStub.calledOnce)
+    t.ok(_withoutStub.calledOnce)
+    t.ok(loggerDebugStub.calledTwice)
+    t.ok(loggerTraceStub.calledOnce)
     t.ok(getTableNameStub.calledOnce)
     t.ok(getTableNameStub.calledWith(Model))
     t.ok(getPrimaryKeyColumnStub.calledOnce)
@@ -211,6 +240,12 @@ test('### Create successfully without primary key ###', function (t) {
   const values = 'someValues'
 
   // Stubs & spies
+  const loggerDebugStub = sandbox.stub(CONNECTOR.logger, 'debug', function (message) { })
+  const loggerTraceStub = sandbox.stub(CONNECTOR.logger, 'trace', function (message) { })
+
+  const _keysStub = sandbox.stub(_, 'keys', function (payload) { return ['0', '1'] })
+  const _withoutStub = sandbox.stub(_, 'without', function (payload) { return ['0', '1'] })
+
   const getTableNameStub = sandbox.stub(CONNECTOR, 'getTableName', function (Model) {
     return 'Posts'
   })
@@ -239,6 +274,10 @@ test('### Create successfully without primary key ###', function (t) {
   // Execution
   createMethod.bind(CONNECTOR, Model, values, cbSpy)()
   setImmediate(function () {
+    t.ok(_keysStub.calledOnce)
+    t.ok(_withoutStub.calledOnce)
+    t.ok(loggerDebugStub.calledTwice)
+    t.ok(loggerTraceStub.calledOnce)
     t.ok(getTableNameStub.calledOnce)
     t.ok(getTableNameStub.calledWith(Model))
     t.ok(getPrimaryKeyColumnStub.calledOnce)

@@ -1,7 +1,7 @@
 {
   "name": "appc.mssql",
   "description": "MSSQL connector",
-  "version": "1.2.1",
+  "version": "1.3.5",
   "author": "Dawson Toth",
   "maintainers": [
     "Dawson Toth <dtoth@appcelerator.com>"
@@ -32,7 +32,7 @@
     "checks": "npm run check-deps && npm run check-security",
     "test": "npm run checks && npm run test:unit && npm run clean",
     "test:coverage": "nyc check-coverage --lines 90 --functions 95 --branches 85 --statements 90",
-    "test:unit": "tap ./test/unit/* --color --bail --coverage --coverage-report=html && npm run test:coverage",
+    "test:unit": "tap ./test/unit/* --color --bail --cov --coverage-report=html && npm run test:coverage",
     "test:integration": "grunt"
   },
   "private": true,
@@ -47,13 +47,12 @@
     "grunt": "^0.4.5",
     "grunt-mocha-test": "^0.12.0",
     "mocha": "^1.21.4",
-    "mockery": "^2.0.0",
-    "nyc": "^10.1.2",
+    "mockery": "2.0.0",
     "should": "^4.0.4",
-    "sinon": "^1.17.7",
-    "snazzy": "^6.0.0",
-    "standard": "^9.0.1",
-    "tap": "^10.3.0"
+    "sinon": "1.17.7",
+    "snazzy": "6.0.0",
+    "standard": "9.0.1",
+    "tap": "10.3.0"
   },
   "standard": {
     "ignore": [

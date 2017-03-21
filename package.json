@@ -48,6 +48,7 @@
     "grunt-mocha-test": "^0.12.0",
     "mocha": "^1.21.4",
     "mockery": "2.0.0",
+    "nyc": "10.1.2",
     "should": "^4.0.4",
     "sinon": "1.17.7",
     "snazzy": "6.0.0",

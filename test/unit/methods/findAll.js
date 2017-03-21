@@ -15,7 +15,7 @@ test('### Start Arrow ###', function (t) {
   server()
     .then((inst) => {
       ARROW = inst
-      CONNECTOR = ARROW.getConnector('appc.mysql')
+      CONNECTOR = ARROW.getConnector('appc.mssql')
       t.ok(ARROW, 'Arrow has been started')
       t.end()
     })

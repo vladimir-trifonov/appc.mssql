@@ -41,11 +41,17 @@ test('### Fetch Schema error ###', function (t) {
     }
   )
 
+  const loggerStub = sinon.stub(CONNECTOR.logger,
+    'error',
+    (CONNECTOR) => { }
+  )
+
   fetchSchema.bind(CONNECTOR, nextSpy)()
   t.ok(nextSpy.calledOnce)
   t.ok(nextSpy.calledWith(null, {}))
   t.ok(sqlStub.calledOnce)
   sqlStub.restore()
+  loggerStub.restore()
   t.end()
 })
 

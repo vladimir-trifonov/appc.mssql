@@ -10,7 +10,7 @@ test('### Start Arrow ###', function (t) {
   server()
     .then((inst) => {
       ARROW = inst
-      CONNECTOR = ARROW.getConnector('appc.mysql')
+      CONNECTOR = ARROW.getConnector('appc.mssql')
       t.ok(ARROW, 'Arrow has been started')
       t.end()
     })
@@ -296,7 +296,7 @@ test('### FindByID Non Empty Response Without PrimaryKey ###', function (t) {
   const loggerStub = sandbox.stub(CONNECTOR.logger, 'debug')
 
   const loggerTraceStub = sandbox.stub(CONNECTOR.logger, 'trace')
-  
+
   findByIdMethod.bind(CONNECTOR, Model, '3', cbSpy)()
 
   setImmediate(function () {

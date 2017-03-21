@@ -8,3 +8,6 @@ Gruntfile.js
 conf/local.js
 app.js
 *.log
+.nyc_output
+.vscode
+coverage

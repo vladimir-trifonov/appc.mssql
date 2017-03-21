@@ -10,7 +10,7 @@ test('### Start Arrow ###', function (t) {
   server()
         .then((inst) => {
           ARROW = inst
-          CONNECTOR = ARROW.getConnector('appc.mysql')
+          CONNECTOR = ARROW.getConnector('appc.mssql')
           ARROW.Connector = CONNECTOR
           ARROW.Connector.Capabilities = {}
 

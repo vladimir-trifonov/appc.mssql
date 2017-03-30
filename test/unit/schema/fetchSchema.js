@@ -48,7 +48,6 @@ test('### Fetch Schema error ###', function (t) {
 
   fetchSchema.bind(CONNECTOR, nextSpy)()
   t.ok(nextSpy.calledOnce)
-  t.ok(nextSpy.calledWith(null, {}))
   t.ok(sqlStub.calledOnce)
   sqlStub.restore()
   loggerStub.restore()
@@ -66,7 +65,8 @@ test('### Fetch Schema without error###', function (t) {
     {
       objects: { Posts: { id: { COLUMN_NAME: 'id', TABLE_NAME: 'Posts' } } },
       database: 'database',
-      primary_keys: { Posts: 'id' }
+      primary_keys: { Posts: 'id' },
+      identity_columns: { Posts: 'id' }
     }
 
   const sqlStub = sinon.stub(

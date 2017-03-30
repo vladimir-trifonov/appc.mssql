@@ -10,6 +10,9 @@ test('### Should create models from schema ###', function (t) {
       objects: require('../../schemaJSON.js'),
       primary_keys: {
         post: 'id'
+      },
+      identity_columns: {
+        post: 'rid'
       }
     },
     name: 'Test',
@@ -19,9 +22,11 @@ test('### Should create models from schema ###', function (t) {
     },
     convertDataTypeToJSType: sinon.spy()
   }
-  const arrowModelExtendStub = sinon.stub(Arrow.Model, 'extend', sinon.spy())
+  const arrowModelExtendStub = sinon.stub(Arrow.Model, 'extend').returns({
+    metadata: {}
+  })
 
-    // Test call
+  // Test call
   createModelsFromSchema.call(mockConnector)
   t.ok(arrowModelExtendStub.calledOnce)
   t.ok(mockConnector.convertDataTypeToJSType.called)
@@ -39,6 +44,9 @@ test('### Should not create models from schema ###', function (t) {
       objects: require('../../schemaJSON.js'),
       primary_keys: {
         post: undefined
+      },
+      identity_columns: {
+        post: undefined
       }
     },
     name: 'Test',
@@ -49,7 +57,7 @@ test('### Should not create models from schema ###', function (t) {
     convertDataTypeToJSType: sinon.spy()
   }
 
-    // Test call
+  // Test call
   createModelsFromSchema.call(mockConnector)
   t.ok(mockConnector.logger.info.calledOnce)
   t.end()
